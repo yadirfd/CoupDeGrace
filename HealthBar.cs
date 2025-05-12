@@ -3,20 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace lasthope.Entities
 {
-    public class HealthBar
+    public class HealthBar(Texture2D texture, Vector2 position, int maxHealth)
     {
-        private Texture2D _texture;
-        private Vector2 _position;
-        private int _maxHealth;
-        public int CurrentHealth { get; private set; }
-
-        public HealthBar(Texture2D texture, Vector2 position, int maxHealth)
-        {
-            _texture = texture;
-            _position = position;
-            _maxHealth = maxHealth;
-            CurrentHealth = maxHealth;
-        }
+        private Texture2D _texture = texture;
+        private Vector2 _position = position;
+        private int _maxHealth = maxHealth;
+        public int CurrentHealth { get; private set; } = maxHealth;
 
         public void TakeDamage(int amount)
         {

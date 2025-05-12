@@ -10,7 +10,7 @@ namespace lasthope
 {
     public class CoupDeGrace : Game
     {
-        private GraphicsDeviceManager _gdm;
+        private readonly GraphicsDeviceManager _gdm;
         private SpriteBatch _sb;
         private InputHandler _input;
         private Character _p1, _p2;
@@ -40,7 +40,7 @@ namespace lasthope
             // Фон
             _bg = Content.Load<Texture2D>("backgrounds/background");
 
-            // Texture для HealthBar один раз
+            // Текстура HealthBar
             _hbTex = new Texture2D(GraphicsDevice, 150, 15);
             _hbTex.SetData(Enumerable.Repeat(Color.White, 150 * 15).ToArray());
 
@@ -55,22 +55,12 @@ namespace lasthope
                 {"BlockRev", Content.Load<Texture2D>("Characters/Player1BlockingReversed")}
             };
 
-            var anims1 = texs1.ToDictionary(
-                kv => kv.Key,
-                kv => new Animation(
-                    new List<Rectangle> { new Rectangle(0, 0, kv.Value.Width, kv.Value.Height) },
-                    0.8f,
-                    !kv.Key.StartsWith("Attack")
-                )
-            );
+            var anims1 = texs1.ToDictionary(kv => kv.Key, kv => new Animation( [new Rectangle(0, 0, kv.Value.Width, kv.Value.Height)], 0.8f, !kv.Key.StartsWith("Attack")));
 
             var hb1 = new HealthBar(_hbTex, new Vector2(40, 10), 100);
-            _p1 = new Character(
-                _input,
-                new Rectangle(100, 450, 50, 100),
-                Keys.A, Keys.D, Keys.W, Keys.Space, Keys.LeftShift,
-                texs1, anims1, hb1
-            );
+
+            _p1 = new Character(_input, new Rectangle(100, 450, 50, 100), Keys.A, Keys.D, Keys.W, Keys.Space, Keys.LeftShift, texs1, anims1, hb1);
+
 
             // Игрок 2: спрайты и анимации
             var texs2 = new Dictionary<string, Texture2D>
@@ -82,23 +72,15 @@ namespace lasthope
                 {"Block", Content.Load<Texture2D>("Characters/Player2Blocking")},
                 {"BlockRev", Content.Load<Texture2D>("Characters/Player2BlockingReversed")}
             };
-            var anims2 = texs2.ToDictionary(
-                kv => kv.Key,
-                kv => new Animation(
-                    new List<Rectangle> { new Rectangle(0, 0, kv.Value.Width, kv.Value.Height) },
-                    0.5f,
-                    !kv.Key.StartsWith("Attack")
-                )
-            );
-            var hb2 = new HealthBar(_hbTex, new Vector2(620, 10), 100);
-            _p2 = new Character(
-                _input,
-                new Rectangle(600, 450, 50, 100),
-                Keys.Left, Keys.Right, Keys.Up, Keys.RightControl, Keys.RightShift,
-                texs2, anims2, hb2
-            );
 
-            // ИИ-бот
+            var anims2 = texs2.ToDictionary(kv => kv.Key, kv => new Animation( [new Rectangle(0, 0, kv.Value.Width, kv.Value.Height)], 0.8f, !kv.Key.StartsWith("Attack")));
+
+            var hb2 = new HealthBar(_hbTex, new Vector2(620, 10), 100);
+
+            _p2 = new Character(_input, new Rectangle(600, 450, 50, 100), Keys.Left, Keys.Right, Keys.Up, Keys.RightControl, Keys.RightShift, texs2, anims2, hb2);
+
+
+            // Запуск бота
             _bot = new BotAI(_p2, _p1);
         }
 
@@ -109,6 +91,7 @@ namespace lasthope
 
             _input.Update();
 
+            //Включение/выключение бота на `
             if (_input.IsNewKey(Keys.OemTilde))
                 _bot.Enabled = !_bot.Enabled;
 
@@ -116,7 +99,7 @@ namespace lasthope
             _p2.Update(gt);
             _bot.Update(gt);
 
-            // Вместо бесконечной проверки — один вызов TryDealDamage на каждую сторону:
+
             _p1.TryDealDamage(_p2, 10);
             _p2.TryDealDamage(_p1, 10);
 

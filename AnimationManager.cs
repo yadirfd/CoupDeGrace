@@ -45,15 +45,12 @@ namespace lasthope.Entities
         {
             var src = _animation.Frames[_currentFrame];
 
-            // высота на экране (dest.Height) и высота исходного кадра (src.Height)
             float scale = dest.Height / (float)src.Height;
 
-            // позиция вывода — левый верхний угол dest
-            Vector2 position = new Vector2(dest.X, dest.Y);
+            Vector2 position = new(dest.X, dest.Y);
 
             var effects = _flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            // здесь указываем scale вместо destRect
             sb.Draw(tex, position, src, Color.White, 0f, Vector2.Zero, scale, effects, 0f);
         }
     }

@@ -92,7 +92,7 @@ namespace lasthope.Entities
         {
             float dt = (float)gt.ElapsedGameTime.TotalSeconds;
 
-            // таймер атаки
+            // Таймер атаки
             if (_attackTimer > 0f)
             {
                 _attackTimer -= dt;
@@ -100,25 +100,26 @@ namespace lasthope.Entities
                     _isAttacking = false;
             }
 
-            // блок
+            // Блок
             if (_blockDuration > 0)
                 _blockDuration--;
             else
                 _isBlocking = false;
 
-            // движение
+            // Движение
             if (_input.IsPressed(_left))
             {
                 Bounds.X -= (int)(200 * dt);
                 _facingRight = false;
             }
+
             else if (_input.IsPressed(_right))
             {
                 Bounds.X += (int)(200 * dt);
                 _facingRight = true;
             }
 
-            // гравитация
+            // Гравитация
             int ground = 500 - Bounds.Height;
             _velocity.Y += 800 * dt;
             Bounds.Y += (int)(_velocity.Y * dt);
@@ -130,20 +131,20 @@ namespace lasthope.Entities
                     _velocity.Y = -400;
             }
 
-            // атака по кнопке
+            // Атака (cooldown)
             if (_attackCooldown > 0)
                 _attackCooldown--;
 
             if (_input.IsNewKey(_attack) && _attackCooldown == 0)
                 TriggerAttack();
 
-            // блок по кнопке
+            // Блок 
             if (_input.IsNewKey(_block))
                 TriggerBlock();
 
             Bounds.X = MathHelper.Clamp(Bounds.X, 0, MapWidth - Bounds.Width);
 
-            // выбираем и проигрываем анимацию
+            // Анимация
             string key = _isAttacking ? (_facingRight ? "Attack" : "AttackRev") : _isBlocking ? (_facingRight ? "Block" : "BlockRev") : (_facingRight ? "Idle" : "IdleRev");
 
             _am.Play(_anims[key], false);

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("lasthope")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f811556b9b5e5b91b2dfed4f9e211e4623a5ae0")]
 [assembly: System.Reflection.AssemblyProductAttribute("lasthope")]
 [assembly: System.Reflection.AssemblyTitleAttribute("lasthope")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
