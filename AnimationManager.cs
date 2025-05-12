@@ -1,0 +1,60 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace lasthope.Entities
+{
+    public class AnimationManager
+    {
+        private Animation _animation;
+        private float _timer;
+        private int _currentFrame;
+        private bool _flip;
+        public AnimationManager(Animation animation)
+        {
+            _animation = animation;
+            _timer = 0;
+            _currentFrame = 0;
+        }
+        public void Play(Animation anim, bool flip = false)
+        {
+            if (_animation == anim) return;
+            _animation = anim;
+            _currentFrame = 0;
+            _timer = 0;
+            _flip = flip;
+        }
+        public void Update(GameTime gt)
+        {
+            _timer += (float)gt.ElapsedGameTime.TotalSeconds;
+
+            if (_timer > _animation.FrameTime)
+            {
+                _timer -= _animation.FrameTime;
+                _currentFrame++;
+
+                if (_currentFrame >= _animation.Frames.Count)
+                {
+                    if (_animation.IsLooping) 
+                        _currentFrame = 0;
+                    else 
+                        _currentFrame--;
+                }
+            }
+        }
+        public void Draw(SpriteBatch sb, Texture2D tex, Rectangle dest)
+        {
+            var src = _animation.Frames[_currentFrame];
+
+            // высота на экране (dest.Height) и высота исходного кадра (src.Height)
+            float scale = dest.Height / (float)src.Height;
+
+            // позиция вывода — левый верхний угол dest
+            Vector2 position = new Vector2(dest.X, dest.Y);
+
+            var effects = _flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            // здесь указываем scale вместо destRect
+            sb.Draw(tex, position, src, Color.White, 0f, Vector2.Zero, scale, effects, 0f);
+        }
+    }
+}
