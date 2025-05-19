@@ -3,18 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace lasthope.Entities
 {
-    public class AnimationManager
+    // Проигрывание анимаций
+    public class AnimationManager(Animation animation)
     {
-        private Animation _animation;
+        private Animation _animation = animation;
         private float _timer;
         private int _currentFrame;
         private bool _flip;
-        public AnimationManager(Animation animation)
-        {
-            _animation = animation;
-            _timer = 0;
-            _currentFrame = 0;
-        }
+
         public void Play(Animation anim, bool flip = false)
         {
             if (_animation == anim) return;
@@ -45,7 +41,7 @@ namespace lasthope.Entities
         {
             var src = _animation.Frames[_currentFrame];
 
-            float scale = dest.Height / (float)src.Height;
+            var scale = dest.Height / (float)src.Height;
 
             Vector2 position = new(dest.X, dest.Y);
 

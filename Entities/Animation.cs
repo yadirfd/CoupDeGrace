@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace lasthope.Entities
 {
+    // Анимация
     public class Animation
     {
         public List<Rectangle> Frames { get; }

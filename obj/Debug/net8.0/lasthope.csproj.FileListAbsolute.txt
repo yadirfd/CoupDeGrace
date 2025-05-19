@@ -75,3 +75,4 @@ C:\Users\Низяков\Desktop\lasthopeEXP\obj\Debug\net8.0\lasthope.pdb
 C:\Users\Низяков\Desktop\lasthopeEXP\obj\Debug\net8.0\lasthope.genruntimeconfig.cache
 C:\Users\Низяков\Desktop\lasthopeEXP\obj\Debug\net8.0\ref\lasthope.dll
 C:\Users\Низяков\Desktop\lasthopeEXP\obj\Debug\net8.0\lasthope.sourcelink.json
+C:\Users\Низяков\Desktop\lasthopeEXP\bin\Debug\net8.0\Content\MenuFont.xnb

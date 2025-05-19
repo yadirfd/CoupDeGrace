@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>C:/Users/Низяков/Desktop/lasthopeEXP/Content/MenuFont.spritefont</SourceFile>
+  <SourceTime>2025-05-18T23:30:34.4523801+05:00</SourceTime>
+  <DestFile>C:/Users/Низяков/Desktop/lasthopeEXP/Content/bin/DesktopGL/Content/MenuFont.xnb</DestFile>
+  <DestTime>2025-05-18T23:41:07.7321298+05:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2025-04-05T15:10:54+05:00</ImporterTime>
+  <Processor>FontDescriptionProcessor</Processor>
+  <ProcessorTime>2025-04-05T15:10:54+05:00</ProcessorTime>
+  <Parameters>
+    <Key>PremultiplyAlpha</Key>
+    <Value>True</Value>
+  </Parameters>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>
