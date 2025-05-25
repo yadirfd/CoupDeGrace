@@ -11,7 +11,7 @@ namespace lasthope.Views
             var center = new Vector2(400f, 300f);
             var size = font.MeasureString(winnerText);
             sb.DrawString(font, winnerText, center - size / 2, Color.Red);
-            const string prompt = "Press Enter or Esc to exit";
+            const string prompt = "Press Esc to exit";
             var promptSize = font.MeasureString(prompt);
             sb.DrawString(font, prompt, center + new Vector2(-promptSize.X / 2, size.Y), Color.White);
         }

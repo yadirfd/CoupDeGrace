@@ -4,10 +4,19 @@ using lasthope.Models;
 
 namespace lasthope.Controllers
 {
-    public class GameController(MenuController menuCtrl, PlayController playCtrl, GameOverController overCtrl)
+    public class GameController
     {
+        private readonly MenuController _menuCtrl;
+        private readonly PlayController _playCtrl;
+        private readonly GameOverController _overCtrl;
         private GameState _state = GameState.Menu;
 
+        public GameController(MenuController menuCtrl, PlayController playCtrl, GameOverController overCtrl)
+        {
+            _menuCtrl = menuCtrl;
+            _playCtrl = playCtrl;
+            _overCtrl = overCtrl;
+        }
 
         // Переключение состояний игры
         public void Update(GameTime gt)
@@ -15,21 +24,21 @@ namespace lasthope.Controllers
             switch (_state)
             {
                 case GameState.Menu:
-                    if (menuCtrl.Update())
+                    if (_menuCtrl.Update())
                         _state = GameState.Playing;
                     break;
                 
                 case GameState.Playing:
-                    var winner = playCtrl.Update(gt);
+                    var winner = _playCtrl.Update(gt);
                     if (winner != null)
                     {
-                        overCtrl.SetWinner(winner);
+                        _overCtrl.SetWinner(winner);
                         _state = GameState.GameOver;
                     }
                     break;
                 
                 case GameState.GameOver:
-                    if (overCtrl.Update())
+                    if (_overCtrl.Update())
                         ExitGame();
                     break;
             }
@@ -39,9 +48,9 @@ namespace lasthope.Controllers
         {
             switch (_state)
             {
-                case GameState.Menu:      menuCtrl.Draw(); break;
-                case GameState.Playing:   playCtrl.Draw(); break;
-                case GameState.GameOver:  overCtrl.Draw(); break;
+                case GameState.Menu:      _menuCtrl.Draw(); break;
+                case GameState.Playing:   _playCtrl.Draw(); break;
+                case GameState.GameOver:  _overCtrl.Draw(); break;
             }
         }
 
