@@ -9,17 +9,25 @@ namespace lasthope.Controllers
         private readonly GameView _view;
         private readonly Character _p1;
         private readonly Character _p2;
-        private readonly BotAI _bot;
+        private readonly BotAi _bot;
+        private bool _isPvC;
         
-        public PlayController(GameView view, Character p1, Character p2, BotAI bot)
+        public PlayController(GameView view, Character p1, Character p2, BotAi bot)
         {
             _view = view;
             _p1 = p1;
             _p2 = p2;
             _bot = bot;
         }
-        // Обновляет персонажей и бот, возвращает имя победителя или null
-        public string Update(GameTime gt)
+        
+        public void SetBotEnabled(bool enabled)
+        {
+            _bot.Enabled = enabled;
+            _isPvC = enabled;
+        }
+        
+        // Обновляет персонажей и бота, возвращает индекс победителя или null
+        public int? Update(GameTime gt)
         {
             _p1.Update(gt);
             _p2.Update(gt);
@@ -29,15 +37,15 @@ namespace lasthope.Controllers
             _p2.TryDealDamage(_p1, 10);
 
             if (!_p1.IsAlive)
-                return "Player 2";
+                return 1;
             if (!_p2.IsAlive)
-                return "Player 1";
+                return 0;
             return null;
         }
 
         public void Draw()
         {
-            _view.Draw(_p1, _p2);
+            _view.Draw(_p1, _p2, _isPvC);
         }
     }
 }
