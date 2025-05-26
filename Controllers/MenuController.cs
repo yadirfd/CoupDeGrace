@@ -12,6 +12,8 @@ namespace lasthope.Controllers
         private readonly InputHandler _input;
         private int _selectedIndex;
         
+        public bool IsPvC => _selectedIndex == 1;
+        
         public MenuController(MenuView view, List<string> items, InputHandler input)
         {
             _view = view;
@@ -32,11 +34,9 @@ namespace lasthope.Controllers
             return false;
         }
 
-        public void Draw()
+        public void Draw(bool isMuted)
         {
-            _view.Draw(_selectedIndex);
+            _view.Draw(_selectedIndex, isMuted);
         }
-
-        public bool IsPvC => _selectedIndex == 1;
     }
 }
