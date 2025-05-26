@@ -8,16 +8,16 @@ namespace lasthope.Controllers
     {
         private readonly GameOverView _view;
         private readonly InputHandler _input;
-        private string _winnerText;
+        private int _winnerIndex;
 
         public GameOverController(GameOverView view, InputHandler input)
         {
             _view = view;
             _input = input;
         }
-        public void SetWinner(string winner)
+        public void SetWinner(int winnerIndex)
         {
-            _winnerText = winner + " Won!";
+            _winnerIndex = winnerIndex;
         }
 
         // Возвращает true, когда игрок нажал Escape для выхода
@@ -28,7 +28,7 @@ namespace lasthope.Controllers
 
         public void Draw()
         {
-            _view.Draw(_winnerText);
+            _view.Draw(_winnerIndex);
         }
     }
 }
