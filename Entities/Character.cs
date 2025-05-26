@@ -8,7 +8,7 @@ namespace lasthope.Entities
     public class Character
     {
         private const int MapWidth = 800;
-        private const int AttackRange = 50;
+        private const int AttackRange = 40;
 
         private Vector2 _velocity;
         private bool _facingRight = true;
@@ -19,6 +19,8 @@ namespace lasthope.Entities
         private bool _damageDealt;      
         private bool _isBlocking;
         private int _blockDuration;
+        
+        public bool IsAttacking => _isAttacking;
 
         private Rectangle _attackBox;
         private int _attackCooldown;
@@ -32,6 +34,7 @@ namespace lasthope.Entities
 
         public Rectangle Bounds;
         public bool IsAlive => _hb.CurrentHealth > 0;
+        public Vector2 HealthBarPosition => _hb.Position;
         private Rectangle AttackBox => _isAttacking ? _attackBox : Rectangle.Empty;
 
         public Character
