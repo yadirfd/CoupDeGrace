@@ -3,17 +3,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace lasthope.Views
 {
-    // Отображение текста победы и инструкции
-    public class GameOverView(SpriteBatch sb, SpriteFont font)
+    public class GameOverView
     {
-        public void Draw(string winnerText)
+        private readonly SpriteBatch _sb;
+        private readonly Texture2D _win1;
+        private readonly Texture2D _win2;
+
+        public GameOverView(SpriteBatch sb, Texture2D win1, Texture2D win2)
         {
-            var center = new Vector2(400f, 300f);
-            var size = font.MeasureString(winnerText);
-            sb.DrawString(font, winnerText, center - size / 2, Color.Red);
-            const string prompt = "Press Esc to exit";
-            var promptSize = font.MeasureString(prompt);
-            sb.DrawString(font, prompt, center + new Vector2(-promptSize.X / 2, size.Y), Color.White);
+            _sb   = sb;
+            _win1 = win1;
+            _win2 = win2;
+        }
+        
+        // Отрисовка экрана окончания игры в зависимости от победителя
+        public void Draw(int winnerIndex)
+        {
+            var image = winnerIndex == 0 ? _win1 : _win2;
+
+            _sb.Draw(image, _sb.GraphicsDevice.Viewport.Bounds, Color.White);
         }
     }
 }
