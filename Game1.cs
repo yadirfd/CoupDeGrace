@@ -7,6 +7,7 @@ using lasthope.Entities;
 using lasthope.Controllers;
 using lasthope.Views;
 
+
 namespace lasthope
 {
     public class CoupDeGrace : Game
@@ -21,11 +22,17 @@ namespace lasthope
         private Texture2D _background;
         private Texture2D _healthBarTexture;
         private SpriteFont _font;
-
+        
+        // Музыка
+        private AudioManager  _audio;
+        private MusicManager _music;
+        private MuteButtonController _muteCtrl;
+        
+        
         // Персонажи и бот
         private Character _player1;
         private Character _player2;
-        private BotAI _bot;
+        private BotAi _bot;
 
         public CoupDeGrace()
         {
@@ -49,10 +56,31 @@ namespace lasthope
             _input = new InputHandler();
 
             // Загрузка графики
-            _background = Content.Load<Texture2D>("backgrounds/background");
+            _background = Content.Load<Texture2D>("backgrounds/background_1");
             _healthBarTexture = new Texture2D(GraphicsDevice, 150, 15);
             _healthBarTexture.SetData(Enumerable.Repeat(Color.White, 150 * 15).ToArray());
+            
+            var whitePixel = new Texture2D(GraphicsDevice, 1, 1);
+            whitePixel.SetData([Color.White]);
+            
+            var menuPvp = Content.Load<Texture2D>("Menu/menu_pvp");
+            var menuPvc = Content.Load<Texture2D>("Menu/menu_pvc");
+            
+            var win1Bg = Content.Load<Texture2D>("GameOverScreen/win_1");
+            var win2Bg = Content.Load<Texture2D>("GameOverScreen/win_2");
+            
             _font = Content.Load<SpriteFont>("MenuFont");
+            
+            // Загрузка музыки
+            _audio = new AudioManager();
+            _muteCtrl = new MuteButtonController(_input, _audio);
+            
+            var iconOn  = Content.Load<Texture2D>("Icons/speaker_icon");
+            var iconOff = Content.Load<Texture2D>("Icons/speaker_muted_icon");
+            var mutePosition = new Vector2(10, _graphics.PreferredBackBufferHeight - 60);
+            
+            _music = new MusicManager();
+            _music.Load(Content);
 
             // Инициализация персонажей и бота
             InitializeCharacters();
@@ -61,33 +89,39 @@ namespace lasthope
             var menuItems = new List<string> { "Player vs Player", "Player vs Computer" };
 
             // Инициализация views
-            var menuView = new MenuView(_spriteBatch, _font, menuItems);
-            var gameView = new GameView(_spriteBatch, _background);
-            var gameOverView = new GameOverView(_spriteBatch, _font);
+            var muteView  = new MuteButtonView(_spriteBatch, iconOn, iconOff, mutePosition);
+            var menuView = new MenuView(_spriteBatch, menuPvp, menuPvc, muteView);
+            var gameView = new GameView(_spriteBatch, _background, _font);
+            var gameOverView = new GameOverView(_spriteBatch, win1Bg, win2Bg);
+            var pauseView = new PauseView(_spriteBatch, _font, GraphicsDevice.Viewport, whitePixel);    
 
             // Инициализация контроллеров
             var menuController = new MenuController(menuView, menuItems, _input);
             var playController = new PlayController(gameView, _player1, _player2, _bot);
             var gameOverController = new GameOverController(gameOverView, _input);
+            var pauseController = new PauseController(pauseView, _input);
 
-            _gameController = new GameController(menuController, playController, gameOverController);
+            _gameController = new GameController(_audio, _input, menuController, playController, pauseController, gameOverController);
         }
 
         private void InitializeCharacters()
         {
             var textures1 = LoadPlayerTextures("Player1");
             var anims1 = CreateAnimations(textures1);
-            var hb1 = new HealthBar(_healthBarTexture, new Vector2(40, 10), 100);
+            var hb1 = new HealthBar(_healthBarTexture, new Vector2(40, 40), 100);
             _player1 = new Character(_input, new Rectangle(100, 450, 50, 100), Keys.A, Keys.D, Keys.W, Keys.Space, Keys.LeftShift, textures1, anims1, hb1);
 
             var textures2 = LoadPlayerTextures("Player2");
             var anims2 = CreateAnimations(textures2);
-            var hb2 = new HealthBar(_healthBarTexture, new Vector2(620, 10), 100);
+            var hb2 = new HealthBar(_healthBarTexture, new Vector2(620, 40), 100);
             _player2 = new Character(_input, new Rectangle(600, 450, 50, 100), Keys.Left, Keys.Right, Keys.Up, Keys.RightControl, Keys.RightShift, textures2, anims2, hb2);
 
-            _bot = new BotAI(_player2, _player1);
+            _player2.SetFacing(false);
+            
+            _bot = new BotAi(_player2, _player1);
         }
-
+        
+        // Спрайты анимации
         private Dictionary<string, Texture2D> LoadPlayerTextures(string prefix)
         {
             return new Dictionary<string, Texture2D>
@@ -112,18 +146,20 @@ namespace lasthope
         protected override void Update(GameTime gameTime)
         {
             _input.Update();
+            _muteCtrl.Update();
             _gameController.Update(gameTime);
+            _music.Update(_gameController.CurrentState);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            
             _spriteBatch.Begin();
-
             _gameController.Draw();
-
             _spriteBatch.End();
+            
             base.Draw(gameTime);
         }
     }
