@@ -1,23 +1,32 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
+﻿    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
 
-namespace lasthope.Views
-{
-    // Отрисовка
-    public class MenuView(SpriteBatch sb, SpriteFont font, List<string> items)
+    namespace lasthope.Views
     {
-        public void Draw(int selectedIndex)
+        // Отрисовка компонентов меню
+        public class MenuView
         {
-            var center = new Vector2(400f, 300f);
-            for (var i = 0; i < items.Count; i++)
+            private readonly SpriteBatch _sb;
+            private readonly Texture2D _pvpImage;
+            private readonly Texture2D _pvcImage;
+            private readonly MuteButtonView _muteIcon;
+
+            public MenuView(SpriteBatch sb, Texture2D pvpImage, Texture2D pvcImage, MuteButtonView muteIcon)
             {
-                var text = items[i];
-                var size = font.MeasureString(text);
-                var pos = center + new Vector2(-size.X / 2, (i - items.Count / 2) * 40);
-                var color = i == selectedIndex ? Color.Yellow : Color.White;
-                sb.DrawString(font, text, pos, color);
+                _sb = sb;
+                _pvpImage = pvpImage;
+                _pvcImage = pvcImage;
+                _muteIcon = muteIcon;
+            }
+
+            // Определение режима игры и иконки музыки в главном меню
+            public void Draw(int selectedIndex, bool isMuted)
+            {
+                var image = selectedIndex == 0 ? _pvpImage : _pvcImage;
+                
+                _sb.Draw(image, destinationRectangle: _sb.GraphicsDevice.Viewport.Bounds, color: Color.White);
+                
+                _muteIcon.Draw(isMuted);
             }
         }
     }
-}
